@@ -2,7 +2,7 @@ import os
 
 import pandas as pd
 from dotenv import load_dotenv
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 
 load_dotenv()
 
@@ -19,3 +19,9 @@ def query_to_df(query: str) -> pd.DataFrame:
     engine = get_engine()
     with engine.connect() as conn:
         return pd.read_sql(query, conn)
+
+
+def query_to_scalar(query: str):
+    engine = get_engine()
+    with engine.connect() as conn:
+        return conn.execute(text(query)).scalar_one()
